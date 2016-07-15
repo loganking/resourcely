@@ -1,0 +1,25 @@
+<%- include ../_header.ejs %>
+  <p><a href="/users/new">Create New User</a></p>
+  <% if (users.length > 0) { %>
+    <table class="table table-striped">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <% for (i in users) { %>
+        <tr>
+          <td><%= users[i].id %></td>
+          <td><%= users[i].name %></td>
+          <td><%= users[i].email %></td>
+          <td><a href="/users/<%= users[i].id %>/edit">edit</a></td>
+          <td><a href="/users/<%= users[i].id %>/delete">delete</a></td>
+        </tr>
+      <% } %>
+    </table>
+  <% } else { %>
+    <p>There are currently no users.</p>
+  <% } %>
+<%- include ../_footer.ejs %>

@@ -1,0 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Bitter);
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,700);
+
+body {
+  padding: 50px;
+  font: 14px "Raleway", "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.navbar-brand {
+  font-size:2em;
+  font-family:"Bitter";
+}
