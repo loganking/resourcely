@@ -22,18 +22,16 @@ router.get('/new', function(req, res, next) {
 });
 
 router.post('/new', function(req, res, next) {
-  User.validate(req.body, 'newUser', function(err, value){
-    if (err) {
-      console.log(err);
-      res.render('../views/users/edit', {data: req.body, errors: err.pretty});
-    } else {
-      bcrypt.hash(value.password, 10, function(err, hash){
-        knex('users').insert({name:value.name, email:value.email, password:hash}).then(function(users){
-          req.flash('success', 'User was successfully created');
-          res.redirect('/users');
-        });
+  User.validate(req.body, 'newUser').then(function(validated){
+    bcrypt.hash(validated.password, 10, function(err, hash){
+      knex('users').insert({name:validated.name, email:validated.email, password:hash}).then(function(users){
+        req.flash('success', 'User was successfully created');
+        res.redirect('/users');
       });
-    }
+    });
+  }).catch(function(err){
+    console.log(err);
+    res.render('../views/users/edit', {data: req.body, errors: err.errors});
   });
 });
 
@@ -47,22 +45,20 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  User.validate(req.body, 'loginUser', function(err, value){
-    if (err) {
-      console.log(err);
-      res.render('../views/users/login', {data: req.body, errors: err.pretty});
-    } else {
-      knex('users').select().where('email', value.email).first().then(function(user){
-        bcrypt.compare(value.password, user.password, function(err, isSame){
-          if (err || !isSame) {
-            res.render('../views/users/login', {data: req.body, errors: {not_found: ['User / password not found in database.']}});
-          } else {
-            req.session.currentUser = {id: user.id, name: user.name};
-            res.redirect('/');
-          }
-        });
+  User.validate(req.body, 'loginUser').then(function(value){
+    knex('users').select().where('email', value.email).first().then(function(user){
+      bcrypt.compare(value.password, user.password, function(err, isSame){
+        if (err || !isSame) {
+          res.render('../views/users/login', {data: req.body, errors: {not_found: ['User / password not found in database.']}});
+        } else {
+          req.session.currentUser = {id: user.id, name: user.name};
+          res.redirect('/');
+        }
       });
-    }
+    });
+  }).catch(function(err){
+    console.log(err);
+    res.render('../views/users/login', {data: req.body, errors: err.errors});
   });
 });
 

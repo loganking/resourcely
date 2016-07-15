@@ -41,7 +41,7 @@ router.get('/new', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  Resource.validate(req.body).then(function(values){
+  Resource.validate(req.body, 'newResource').then(function(values){
     console.log(values);
     knex('resources').insert({name:values.name, url:values.url, description:values.description, user_id:req.signedCookies.currentUser.id}).returning('id')
     .catch(function(error){

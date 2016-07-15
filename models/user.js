@@ -1,65 +1,108 @@
-var Joi = require('joi');
-var schemas = {
-  newUser: Joi.object().keys({
-    id: Joi.number().integer(),
-    name: Joi.string().trim().max(255),
-    email: Joi.string().trim().email().max(255),
-    password: Joi.string().trim(),
-    password2: Joi.ref('password'),
-    created: Joi.any().forbidden(),
-    modified: Joi.any().forbidden()
+var Checkit = require('checkit');
+var rules = {
+  newUser: Checkit({
+    id: {
+      rule: 'integer',
+      message: 'Id must be an integer.'
+    },
+    name: [
+      {
+        rule: 'required',
+        message: 'Name is required.'
+      }, {
+        rule: 'alpha',
+        message: 'Name can only have alphabetical characters.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Name cannot be longer than 255 characters.'
+      }
+    ],
+    email: [
+      {
+        rule: 'required',
+        message: 'Email is required.'
+      }, {
+        rule: 'email',
+        message: 'Email must be a valid email address.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Email cannot be longer than 255 characters.'
+      }
+    ],
+    password: [
+      {
+        rule: 'required',
+        message: 'Password is required.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Password cannot be longer than 255 characters.'
+      }
+    ],
+    password2: [
+      {
+        rule: 'required',
+        message: 'Password is required.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Password cannot be longer than 255 characters.'
+      }, {
+        rule: 'matchesField:password',
+        message: 'Passwords must match.'
+      }
+    ],
+    created: {
+      rule: 'empty',
+      message: 'Created is not allowed.'
+    },
+    modified: {
+      rule: 'empty',
+      message: 'Modified is not allowed.'
+    }
   }),
-  loginUser: Joi.object().keys({
-    email: Joi.string().trim().email().max(255),
-    password: Joi.string().trim()
+  loginUser: Checkit({
+    email: [
+      {
+        rule: 'required',
+        message: 'Email is required.'
+      }, {
+        rule: 'email',
+        message: 'Email must be a valid email address.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Email cannot be longer than 255 characters.'
+      }
+    ],
+    password: [
+      {
+        rule: 'required',
+        message: 'Password is required.'
+      }, {
+        rule: 'maxLength:255',
+        message: 'Password cannot be longer than 255 characters.'
+      }
+    ],
   })
-}
-
-var messages = {
-  id: {
-    'number.integer': 'Id must be an integer.'
-  },
-  name: {
-    'any.empty': 'Name is required.',
-    'string.max': 'Name cannot be longer than 255 characters.'
-  },
-  email: {
-    'any.empty': 'Email is required.',
-    'string.email': 'Email must be a valid email address.',
-    'string.max': 'Email cannot be longer than 255 characters.'
-  },
-  password: {
-    'any.empty': 'Password is required.',
-  },
-  password2: {
-    'any.allowOnly': 'Passwords must match.',
-  },
 };
 
-var validate = function(data, schemaName, callback){
-  if (Object.keys(schemas).indexOf(schemaName) === -1) {
-    throw schemaName + ' is not a valid schema.';
-  }
-  Joi.validate(data, schemas[schemaName], {
-    abortEarly: false
-  }, function(err, value){
-    if (err){
-      var errors = {
-        raw: err,
-        pretty: {}
-      };
-      for (i in err.details){
-        console.log(err.details[i]);
-        if (messages.hasOwnProperty(err.details[i].path) && messages[err.details[i].path].hasOwnProperty(err.details[i].type)){
-          if (typeof errors.pretty[err.details[i].path] === 'undefined') errors.pretty[err.details[i].path] = [];
-          errors.pretty[err.details[i].path].push(messages[err.details[i].path][err.details[i].type]);
-        }
+var validate = function(data, ruleset) {
+  return rules[ruleset].run(data);
+}
+
+var mapData = function(data, primary, secondary) {
+  if (!data.length || data.length === 1) return data;
+  var mappedData = {};
+  data.forEach(function(record, i){
+    for (field in record) {
+      if (field.substr(0, primary.length) === primary) {
+        mappedData[field.substr(primary.length+1)] = record[field];
+      } else if (field.substr(0, secondary.length) === secondary) {
+        if (!mappedData[secondary]) mappedData[secondary] = [];
+        if (!mappedData[secondary][i]) mappedData[secondary][i] = {};
+        mappedData[secondary][i][field.substr(secondary.length+1)] = record[field];
       }
-      callback(errors, value);
-    } else {
-      callback(null, value);
     }
   });
+  return mappedData;
 }
 
 module.exports = {

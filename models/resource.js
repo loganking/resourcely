@@ -1,5 +1,6 @@
 var Checkit = require('checkit');
-var rules = Checkit({
+var rules = {
+  newResource: Checkit({
     id: {
       rule: 'integer',
       message: 'Id must be an integer.'
@@ -46,10 +47,11 @@ var rules = Checkit({
       rule: 'empty',
       message: 'Modified is not allowed.'
     }
-});
+  })
+}
 
-var validate = function(data) {
-  return rules.run(data);
+var validate = function(data, ruleset) {
+  return rules[ruleset].run(data);
 }
 
 var mapData = function(data, primary, secondary) {
