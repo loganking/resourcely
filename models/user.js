@@ -1,6 +1,8 @@
+var Resource = require('./model');
+
 var knex = require('../db/knex');
 var Checkit = require('checkit');
-var rules = {
+Resource.rules = {
   newUser: Checkit({
     id: {
       rule: 'integer',
@@ -92,28 +94,4 @@ var rules = {
   })
 };
 
-var validate = function(data, ruleset) {
-  return rules[ruleset].run(data);
-}
-
-var mapData = function(data, primary, secondary) {
-  if (!data.length || data.length === 1) return data;
-  var mappedData = {};
-  data.forEach(function(record, i){
-    for (field in record) {
-      if (field.substr(0, primary.length) === primary) {
-        mappedData[field.substr(primary.length+1)] = record[field];
-      } else if (field.substr(0, secondary.length) === secondary) {
-        if (!mappedData[secondary]) mappedData[secondary] = [];
-        if (!mappedData[secondary][i]) mappedData[secondary][i] = {};
-        mappedData[secondary][i][field.substr(secondary.length+1)] = record[field];
-      }
-    }
-  });
-  return mappedData;
-}
-
-module.exports = {
-  validate: validate,
-  mapData: mapData
-}
+module.exports = Resource;
