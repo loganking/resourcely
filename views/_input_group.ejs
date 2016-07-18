@@ -9,8 +9,8 @@
       name="<%= input.slug %>"
       <% if (typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') {
         %>value="<%= data[input.slug] %>"<%
-      } %>>
-      <% if (input.type === 'textarea' && typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') {
+      } %>><% if (input.type === 'textarea' && typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') {
+        console.log(data[input.slug]);
         %><%= data[input.slug] %><%
       } %></<%= input.type %>>
     <% if (typeof(errors) !== 'undefined' && typeof(errors[input.slug]) !== 'undefined') { %>
