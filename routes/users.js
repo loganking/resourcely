@@ -18,10 +18,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/new', function(req, res, next) {
-  res.render('../views/users/edit');
+  res.render('../views/users/new');
 });
 
-router.post('/new', function(req, res, next) {
+router.post('/', function(req, res, next) {
   User.validate(req.body, 'newUser').then(function(validated){
     bcrypt.hash(validated.password, 10, function(err, hash){
       knex('users').insert({name:validated.name, email:validated.email, password:hash}).then(function(users){
@@ -31,7 +31,7 @@ router.post('/new', function(req, res, next) {
     });
   }).catch(function(err){
     console.log(err);
-    res.render('../views/users/edit', {data: req.body, errors: err.errors});
+    res.render('../views/users/new', {data: req.body, errors: err.errors});
   });
 });
 

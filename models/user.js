@@ -1,3 +1,4 @@
+var knex = require('../db/knex');
 var Checkit = require('checkit');
 var rules = {
   newUser: Checkit({
@@ -27,6 +28,13 @@ var rules = {
       }, {
         rule: 'maxLength:255',
         message: 'Email cannot be longer than 255 characters.'
+      }, {
+        rule: function(val){
+          return knex('users').where('email', '=', val).then(function(resp) {
+            if (resp.length > 0) throw new Error('The email address is already in use.')
+          })
+        },
+        message: ''
       }
     ],
     password: [
@@ -106,5 +114,6 @@ var mapData = function(data, primary, secondary) {
 }
 
 module.exports = {
-  validate: validate
+  validate: validate,
+  mapData: mapData
 }

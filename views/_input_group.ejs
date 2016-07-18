@@ -1,8 +1,18 @@
 <div class="form-group">
   <label class="col-sm-2 control-label" for="input<%= input.slug %>"><%= input.name %><% if (input.required) { %><small class="text-danger"> (required)</small><% } %></label>
   <div class="col-sm-10">
-    <<%= input.type %> type="text" class="form-control" id="input<%= input.slug %>" placeholder="<%= input.placeholder %>" name="<%= input.slug %>"
-      <% if (typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') { %>value="<%= data[input.slug] %>"<% } %>><% if (input.type === 'textarea' && typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') { %><%= data[input.slug] %><% } %></<%= input.type %>>
+    <<%= (input.type==='textarea')? input.type : 'input' %>
+      type="<%= (input.type==='password')? input.type : 'text' %>"
+      class="form-control"
+      id="input<%= input.slug %>"
+      placeholder="<%= input.placeholder %>"
+      name="<%= input.slug %>"
+      <% if (typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') {
+        %>value="<%= data[input.slug] %>"<%
+      } %>>
+      <% if (input.type === 'textarea' && typeof(data) !== 'undefined' && typeof(data[input.slug]) !== 'undefined') {
+        %><%= data[input.slug] %><%
+      } %></<%= input.type %>>
     <% if (typeof(errors) !== 'undefined' && typeof(errors[input.slug]) !== 'undefined') { %>
       <div class="alert alert-danger">
         <p><%= errors[input.slug].message %></p>

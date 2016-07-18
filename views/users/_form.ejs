@@ -1,0 +1,15 @@
+<form class="form-horizontal" action="<%= action %><%= (method !== 'POST')? '?_method="' + method + '"' : '' %>" method="POST">
+  <% if (typeof(data) !== 'undefined' && typeof(data.id) !== 'undefined') { %>
+    <input type="hidden" name="id" value="<%= data.id %>" />
+  <% } %>
+  <%- include('../_input_group.ejs', {input:{name:"Name", slug:"name", placeholder:"Maxwell Johannesburg", type:"input", required:true}}) %>
+  <%- include('../_input_group.ejs', {input:{name:"Email Address", slug:"email", placeholder:"max@gmail.com", type:"input", required:true}}) %>
+  <%- include('../_input_group.ejs', {input:{name:"Password", slug:"password", placeholder:"", type:"password"}}) %>
+  <%- include('../_input_group.ejs', {input:{name:"Re-enter Password", slug:"password2", placeholder:"", type:"password"}}) %>
+  <div class="form-group">
+    <div class="col-sm-10 col-sm-offset-2">
+      <button type="submit" class="btn btn-default"><%= submit_text %></button>
+      <a class="text-danger" href="/users">cancel</a>
+    </div>
+  </div>
+</form>

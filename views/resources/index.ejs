@@ -1,34 +1,35 @@
 <%- include ../_header.ejs %>
-    <p>Welcome to Resource.ly &mdash; your source for the best resources.</p>
-    <div class="col-md-9">
-      <% if (resources.length > 0) { %>
-        <table class="table table-striped">
+  <p>Welcome to Resource.ly &mdash; your source for the best resources.</p>
+  <p><a href="/resources/new">Create New Resource</a></p>
+  <div class="col-md-9">
+    <% if (resources.length > 0) { %>
+      <table class="table table-striped">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>URL</th>
+          <th>Description</th>
+          <th>Tags</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <% for (i in resources) { %>
           <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>URL</th>
-            <th>Description</th>
-            <th>Tags</th>
-            <th></th>
-            <th></th>
+            <td><%= resources[i].id %></td>
+            <td><%= resources[i].name %></td>
+            <td><a href="<%= resources[i].url %>"><%= resources[i].url %></a></td>
+            <td><%= resources[i].description %></td>
+            <td><%= resources[i].tags %></td>
+            <td><a href="/resources/<%= resources[i].id %>/edit">edit</a></td>
+            <td><a href="/resources/<%= resources[i].id %>/delete">delete</a></td>
           </tr>
-          <% for (i in resources) { %>
-            <tr>
-              <td><%= resources[i].id %></td>
-              <td><%= resources[i].name %></td>
-              <td><a href="<%= resources[i].url %>"><%= resources[i].url %></a></td>
-              <td><%= resources[i].description %></td>
-              <td><%= resources[i].tags %></td>
-              <td><a href="/resources/<%= resources[i].id %>/edit">edit</a></td>
-              <td><a href="/resources/<%= resources[i].id %>/delete">delete</a></td>
-            </tr>
-          <% } %>
-        </table>
-      <% } else { %>
-        <p>There are currently no resources.</p>
-      <% } %>
-    </div>
-    <div class="col-md-3 well">
-      filters and search for resources goes here
-    </div>
+        <% } %>
+      </table>
+    <% } else { %>
+      <p>There are currently no resources.</p>
+    <% } %>
+  </div>
+  <div class="col-md-3 well">
+    filters and search for resources goes here
+  </div>
 <%- include ../_footer.ejs %>

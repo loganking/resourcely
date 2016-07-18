@@ -1,6 +1,6 @@
-<form class="form-horizontal" action="<%= action %>" method="<%= (method==='GET')? 'GET' : 'POST' %>">
+<form class="form-horizontal" action="<%= action %><%= (method !== 'POST')? '?_method="' + method + '"' : '' %>" method="POST">
   <% if (typeof(data) !== 'undefined' && typeof(data.id) !== 'undefined') { %>
-    <input type="hidden" name="id" value="<%= data.id %>" <%= (method !== 'GET' && method !== 'POST'])? '_method="'+method+"' : '' %> />
+    <input type="hidden" name="id" value="<%= data.id %>" />
   <% } %>
   <%- include('../_input_group.ejs', {input:{name:"Name", slug:"name", placeholder:"Awesome Blog Post", type:"input", required:true}}) %>
   <%- include('../_input_group.ejs', {input:{name:"URL", slug:"url", placeholder:"http://www.example.com", type:"input", required:true}}) %>
