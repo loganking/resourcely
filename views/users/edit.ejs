@@ -1,3 +1,16 @@
 <%- include ../_header.ejs %>
-  <%- include('_form.ejs', {method:'PUT', action:'/users/'+data.id, submit_text:'Submit'}) %>
+  <div class="container-fluid">
+    <%- include('../_form.ejs', {
+      method:'PUT',
+      action:'/users/' + data.id,
+      submitText:'Save Changes',
+      cancelLink:'/users',
+      inputs: [
+        {name:"Name", slug:"name", placeholder:"Maxwell Johannesburg", type:"input", required:true},
+        {name:"Email Address", slug:"email", placeholder:"max@gmail.com", type:"input", required:true},
+        {name:"Password", slug:"password", placeholder:"", type:"password", required:false},
+        {name:"Re-enter Password", slug:"password2", placeholder:"", type:"password", required:false}
+      ]
+    }) %>
+  </div>
 <%- include ../_footer.ejs %>

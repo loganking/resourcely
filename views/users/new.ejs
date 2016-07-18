@@ -1,5 +1,16 @@
 <%- include ../_header.ejs %>
   <div class="container-fluid">
-    <%- include('_form.ejs', {method:'POST', action:'/users', submit_text:'Create'}) %>
+    <%- include('../_form.ejs', {
+      method:'POST',
+      action:'/users',
+      submitText:'Create',
+      cancelLink:'/users',
+      inputs: [
+        {name:"Name", slug:"name", placeholder:"Maxwell Johannesburg", type:"input", required:true},
+        {name:"Email Address", slug:"email", placeholder:"max@gmail.com", type:"input", required:true},
+        {name:"Password", slug:"password", placeholder:"", type:"password", required:true},
+        {name:"Re-enter Password", slug:"password2", placeholder:"", type:"password", required:true}
+      ]
+    }) %>
   </div>
 <%- include ../_footer.ejs %>

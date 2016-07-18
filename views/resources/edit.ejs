@@ -1,5 +1,16 @@
 <%- include ../_header.ejs %>
   <div class="container-fluid">
-    <%- include('_form.ejs', {method:'PUT', action:'/resources/'+data.id, submit_text:'Create'}) %>
+    <%- include('../_form.ejs', {
+      method:'PUT',
+      action:'/resources/' + data.id,
+      submitText:'Save Changes',
+      cancelLink:'/resources',
+      inputs: [
+        {name:"Name", slug:"name", placeholder:"Awesome Blog Post", type:"input", required:true},
+        {name:"URL", slug:"url", placeholder:"http://www.example.com", type:"input", required:true},
+        {name:"Description", slug:"description", placeholder:"Lorem ipsum dolor sit amet...", type:"textarea", required:false},
+        {name:"Tags", slug:"tags", placeholder:"HTML, CSS, JavaScript, etc...", type:"textarea", required:false}
+      ]
+    }) %>
   </div>
 <%- include ../_footer.ejs %>

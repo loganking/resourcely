@@ -1,0 +1,14 @@
+<form class="form-horizontal" action="<%= action %><%= (method !== 'POST')? '?_method="' + method + '"' : '' %>" method="POST">
+  <% if (typeof(data) !== 'undefined' && typeof(data.id) !== 'undefined') { %>
+    <input type="hidden" name="id" value="<%= data.id %>" />
+  <% } %>
+  <% inputs.forEach(function(input){ %>
+    <%- include('_input_group.ejs', {input:input}) %>
+  <% }); %>
+  <div class="form-group">
+    <div class="col-sm-10 col-sm-offset-2">
+      <button type="submit" class="btn btn-default"><%= submitText %></button>
+      <a class="text-danger" href="<%= cancelLink %>">cancel</a>
+    </div>
+  </div>
+</form>
